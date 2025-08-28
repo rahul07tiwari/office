@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template
+from flask import jsonify
 import smtplib, json, os
 from email.mime.text import MIMEText
 
@@ -12,10 +13,11 @@ try:
 except KeyError:
     with open("config.json") as f:
         config = json.load(f)
-    SMTP_SERVER = config["SMTP_SERVER"]
-    PORT = config["PORT"]
-    RECEIVER_EMAIL = config["RECEIVER_EMAIL"]
-    PASSWORD = os.environ["SMTP_PASSWORD"]
+    SMTP_SERVER = os.environ.get("SMTP_SERVER", config.get("SMTP_SERVER"))
+    PORT = int(os.environ.get("PORT", config.get("PORT", 465)))
+    RECEIVER_EMAIL = os.environ.get("RECEIVER_EMAIL", config.get("RECEIVER_EMAIL"))
+    PASSWORD = os.environ.get("SMTP_PASSWORD")
+
 
 if not PASSWORD:
     raise Exception("SMTP_PASSWORD must be set as an environment variable!")
@@ -35,7 +37,7 @@ def Send_Emails():
         return "Failed to parse JSON", 400
 
     if form_data.get("Terms") != "yes":
-        return "you must accept the terms and conditions", 400
+        return jsonify({"success": False, "message": "❌ You must accept the Terms & Conditions"}), 400
 
     form_data.pop("Terms", None)
     form_data.pop("Remember", None)
@@ -52,9 +54,9 @@ def Send_Emails():
             server.login(RECEIVER_EMAIL, PASSWORD)
             server.sendmail(RECEIVER_EMAIL, RECEIVER_EMAIL, msg.as_string())
 
-            return "Form Submitted successfully!"
+            return jsonify({"success": True, "message": "✅ Form submitted successfully! Email sent."})
     except Exception as e:
-        return f"Failed to send email: (str(e))"
+        return jsonify({"success": False, "message": f"❌ Failed to send email: {str(e)}"}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
