@@ -1,0 +1,5 @@
+{
+  "SMTP_SERVER": "smtp.gmail.com",
+  "PORT": 465,
+  "SENDER_EMAIL": "rahultiwari16031@gmail.com"
+}

